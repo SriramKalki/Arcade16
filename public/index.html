@@ -22,7 +22,24 @@
       const files = await response.json();
       const fileList = document.getElementById('fileList');
       fileList.innerHTML = '';
-     
+      files.forEach(file => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `/uploads/${file}`;
+        a.textContent = file;
+        a.target = '_blank';
+        li.appendChild(a);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = async () => {
+          await fetch(`/uploads/${file}`, { method: 'DELETE' });
+          fetchFiles();
+        };
+        li.appendChild(deleteButton);
+
+        fileList.appendChild(li);
+      });
     }
 
     fetchFiles();
